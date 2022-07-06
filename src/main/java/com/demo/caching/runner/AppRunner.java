@@ -17,18 +17,21 @@ public class AppRunner implements CommandLineRunner {
 	
 	@Override
 	public void run(String... args) throws Exception {
+		log.info("");
 		log.info(".... Getting messages");
 	    log.info("messaging category -> humor" + messagingRepository.getByCategpry("humor"));
 	    log.info("messaging category -> busy" + messagingRepository.getByCategpry("busy"));
 	    log.info("messaging category -> greeting" + messagingRepository.getByCategpry("greeting"));
 	    log.info("messaging category -> plans" + messagingRepository.getByCategpry("plans"));
 	    
+	    log.info("");
 	    log.info(".... Calling cached messages");
 	    log.info("messaging cached category -> humor" + messagingRepository.getByCategpry("humor"));
 	    log.info("messaging cached category -> busy" + messagingRepository.getByCategpry("busy"));
 	    log.info("messaging cached category -> greeting" + messagingRepository.getByCategpry("greeting"));
 	    log.info("messaging cached category -> plans" + messagingRepository.getByCategpry("plans"));
 	    
+	    log.info("");
 	    log.info(".... Did you see how much faster calling cached messages");
 	    log.info("messaging cached category -> humor" + messagingRepository.getByCategpry("humor"));
 	    log.info("messaging cached category -> busy" + messagingRepository.getByCategpry("busy"));
