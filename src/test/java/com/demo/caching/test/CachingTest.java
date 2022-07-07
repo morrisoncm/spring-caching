@@ -45,7 +45,6 @@ class CachingTest {
 		assertNotNull(cache.get("plans"));
 	}
 
-
 	@ParameterizedTest
 	@ValueSource(strings = { "messages", "humor", "busy", "greeting" })
 	void test_text_equals(String category) {
