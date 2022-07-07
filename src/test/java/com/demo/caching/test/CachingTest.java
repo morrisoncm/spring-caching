@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.Cache;
@@ -25,16 +27,16 @@ class CachingTest {
 	private CacheManager cacheManager;
 	@Autowired
 	private MessagingRepository messagingRepository;
-	
+
 	@BeforeEach
-    void setUp() {
+	void setUp() {
 		messagingRepository.getByCategpry("humor");
 		messagingRepository.getByCategpry("busy");
 		messagingRepository.getByCategpry("greeting");
 		messagingRepository.getByCategpry("plans");
-    }
-	
-	@Test 
+	}
+
+	@Test
 	void testCacheManager() {
 		Cache cache = cacheManager.getCache("messages");
 		assertNotNull(cache.get("humor"));
@@ -42,56 +44,19 @@ class CachingTest {
 		assertNotNull(cache.get("greeting"));
 		assertNotNull(cache.get("plans"));
 	}
-	
-	private SimpleMessage getSimpleMessage(String category) {
+
+
+	@ParameterizedTest
+	@ValueSource(strings = { "messages", "humor", "busy", "greeting" })
+	void test_text_equals(String category) {
+		assertNotNull(messagingRepository.getByCategpry(category));
+		assertEquals("Hey, its me!", getSimpleMessage(category));
+	}
+
+	private String getSimpleMessage(String category) {
 		Cache cache = cacheManager.getCache("messages");
 		ValueWrapper valueWrapper = cache.get(category);
-		return (SimpleMessage) valueWrapper.get();	
+		return ((SimpleMessage) valueWrapper.get()).getText();
 	}
-	
-	@Test
-	void testGetByCategpryHumorTest() {
-		assertNotNull(messagingRepository.getByCategpry("humor"));
-	}
-	
-	@Test
-	void testGetSimpleMessageHumor() {
-		SimpleMessage simpleMessage = getSimpleMessage("humor");
-		assertEquals("Hey, its me!", simpleMessage.getText());
-	}
-	
-	@Test
-	void testGetByCategpry() {
-		assertNotNull(messagingRepository.getByCategpry("busy"));
-	}
-	
-	@Test
-	void testGetSimpleMessageBusy() {
-		SimpleMessage simpleMessage = getSimpleMessage("busy");
-		assertEquals("Hey, its me!", simpleMessage.getText());
-	}
-	
-	@Test
-	void testGetByCategpryGreeting() {
-		assertNotNull(messagingRepository.getByCategpry("greeting"));
-	}
-	
-	@Test
-	void testGetSimpleMessageGreeting() {
-		SimpleMessage simpleMessage = getSimpleMessage("greeting");
-		assertEquals("Hey, its me!", simpleMessage.getText());
-	}
-	
-	@Test
-	void testGetByCategpryPlans() {
-		assertNotNull(messagingRepository.getByCategpry("plans"));
-	}
-	
-	@Test
-	void testGetSimpleMessagePlans() {
-		SimpleMessage simpleMessage = getSimpleMessage("plans");
-		assertEquals("Hey, its me!", simpleMessage.getText());
-	}
-	
-	
+
 }
