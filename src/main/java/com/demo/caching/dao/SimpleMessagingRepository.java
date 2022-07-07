@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class SimplemessagingRepository implements MessagingRepository {
+public class SimpleMessagingRepository implements MessagingRepository {
 
 	@Override
 	@Cacheable("messages")
